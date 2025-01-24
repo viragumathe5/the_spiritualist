@@ -1,0 +1,9 @@
+.. The Spiritualist documentation master file, created by
+   sphinx-quickstart on Thu Jan 23 22:38:03 2025.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+The Spiritualist
+==============================
+
+This is fun

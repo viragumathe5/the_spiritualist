@@ -1,0 +1,74 @@
+.. The Spiritualist documentation master file, created by
+   sphinx-quickstart on Thu Jan 23 22:38:03 2025.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Data Extraction
+===================
+
+The dataset contins the xml file.
+The tag hierarchy can be visualised by ocnverting the xml into json.
+
+{
+    "{http://www.loc.gov/standards/alto/v3/alto.xsd}alto": {
+        "{http://www.loc.gov/standards/alto/v3/alto.xsd}Description": {
+            "{http://www.loc.gov/standards/alto/v3/alto.xsd}MeasurementUnit": {},
+            "{http://www.loc.gov/standards/alto/v3/alto.xsd}sourceImageInformation": {},
+            "{http://www.loc.gov/standards/alto/v3/alto.xsd}OCRProcessing": {
+                "{http://www.loc.gov/standards/alto/v3/alto.xsd}ocrProcessingStep": {
+                    "{http://www.loc.gov/standards/alto/v3/alto.xsd}processingDateTime": {},
+                    "{http://www.loc.gov/standards/alto/v3/alto.xsd}processingSoftware": {
+                        "{http://www.loc.gov/standards/alto/v3/alto.xsd}softwareCreator": {},
+                        "{http://www.loc.gov/standards/alto/v3/alto.xsd}softwareName": {},
+                        "{http://www.loc.gov/standards/alto/v3/alto.xsd}softwareVersion": {}
+                    }
+                }
+            }
+        },
+        "{http://www.loc.gov/standards/alto/v3/alto.xsd}Styles": {},
+        "{http://www.loc.gov/standards/alto/v3/alto.xsd}Layout": {
+            "{http://www.loc.gov/standards/alto/v3/alto.xsd}Page": {
+                "{http://www.loc.gov/standards/alto/v3/alto.xsd}PrintSpace": {
+                    "{http://www.loc.gov/standards/alto/v3/alto.xsd}TextLine": []
+                }
+            }
+        }
+    }
+}
+
+
+The text can be extracted from the elements in the key {http://www.loc.gov/standards/alto/v3/alto.xsd}TextLine
+
+
+**Data Storage**
+
+
+The data is axtracted and stored in the json compileing from all the pages in the newspaper.
+Each and every news paper has an id which works as an identificaiton factor for the papers.
+
+The extracted json would have the following key value pairs
+
+
+{
+    "paper_id": <ID>, \\
+    "newspaper_name": <NAME_OF_THE_NEWSPAPER>, \\
+    "newspaper_issue": <ISSUE_NUM>, \\
+    "date": <DATE>, \\
+    "Page1": <>, \\
+    "Page2": <>, \\
+    "Page3": <>, \\
+    "Page4": <>, \\
+    "Page5": <>, \\
+    "Page6": <>, \\
+    "Page7": <>, \\
+    "Page8": <>, \\
+    "Page9": <>, \\
+    "Page10": <>, \\
+    "Page11": <>, \\
+    "Page12": <>, \\
+    "Page13": <>, \\
+    "Page14": <>, \\
+    "Page15": <>, \\
+    "Page16": <>, \\
+    "text": <> \\
+}
