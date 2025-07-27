@@ -1,33 +1,98 @@
 Article Extraction
 ==============================
 
-**Article Extraction**
+**Article Extraction Process**
 
 For creating an open knowledge project the plan is to build a RAG which can be esaily accessible using simple queires.
-for that purpose the articles, advertisements and other contents are needed to extracted.
+for that purpose the articles and other contents are needed to extracted.
 
-For extracting the articles from the newspaper texts currently we are using GPT-4o.
-Following are the examples for the extracted articles.
+The project uses very specific prompt engineering to extract the articles from the articles. The first approach is to divide the concatinated text into the two different segments and feed it to gpt-4o to get the articles but it was more expensive and time consuming and therefore the new extraction process was used for extracting the articles from each page. So the each paper is calling the API for the each page in the newspaper.
+
+The follwoing snippit shows the exracted format for the articles from the specific paper id and page numer.
 
 .. code-block:: JSON
    :linenos:
 
 
-        {
-            "title": "THE PROPOSED CHEAP EDITION, OF ZOLLNER’S “TRANSCENDENTAL -PHYSICS.’’",
-            "text": "A considerable number of volumes of the proposed cheap edition of the above work has been ordered, btit not enough, up to March 1st, to warrant placing the ; .book again in the. press. Those who facilitate the bringing out of the book by ' ordering copies before it' goes to press, will bo supplied with tlie> sai4. copies ^at 2s, 6d.. eaQh, whereas, after publication its'price wiTi be 3s. Cd. Orders tor > the book should be sent ,to W. TI. HAKRISONJ, ,b8, ; Miiseutn $1reetj London."
-        },
-        {
-            "title": "WORKS BY THE HON. RODEN NOEL",
-            "text": "THE RED FLAO, %V ' . AND' of H ER ROE its. ' Small Svo..'6s. BY Tnk HON. KODIfN NOEL. | “ There are poetry and power of a high' order in thp volume before,us. ,The ‘Red Flag’ is a terribl.e^atid thunderous poem. I There,are,fine sympathies with, the sorrows of Londpn ’ life and ■wonderful knowledge of them.. Perhaps one of the most solemn, • awful poems' of , present century is ^ The Vision of the Desert.’ . Let his. ima.gination Smd metaphysical faCulty .be well yoked and guided by his own cultivated taste, and we must airadmit the advent-df a great ■pQet.”~Britbh Quartei'h/ Review."
-        },
-        {
-            "title": "BEATRICE, AND OTHER POEMS",
-            "text": "Fcap. $%'o, 7s. . BY THE II 0 N. ROD EN NO EL,. It is impoBsible to read ‘ Beatrice ’ through without being ,ppwerful.ly;mdv : ed.'' There, afg passages in it Which for intensity and tenderness, clear'and vivjd vision, spontanemia, and delicate Sympathy, may be compared with* the best efforts of our best lining w titers'. Sped at or."
-        }
+    {
+      "135908619": {
+        "Page2": [
+          {
+            "title": "",
+            "article": ""
+          }
+        ],
+        "Page3": [
+          {
+            "title": "",
+            "article": ""
+          }
+        ],
+        "Page4": [
+          {
+            "title": "",
+            "article": ""
+          },
+        ],
+        "Page5": [
+          {
+            "title": "",
+            "article": ""
+          },
+          {
+            "title": "",
+            "article": ""
+          },
+          {
+            "title": "",
+            "article": ""
+          }
+        ],
+        "Page7": [
+          {
+            "title": "",
+            "article": ""
+          },
+          {
+            "title": "",
+            "article": ""
+          },
+          {
+            "title": "",
+            "article": ""
+          },
+          {
+            "title": "",
+            "article": ""
+          }
+        ]
+      }
+    }
 
+
+This JSONs helps trace back the articles when they are retrieved and indexed. After the generation of the respone it can be referred back as the generated content reference.
+
+**Documents**
+
+As a part of the RAG pipeline, Each article is considered as a document. Hence it needs to have its own meta data to retrieve the information about the article. The important meta data which needs to be traced back is paper id, page number, title and text. All the extracted information get paarsed and the documets are stored in the JSON for preparaiton of the vector database.
+
+The following snippit shows the possible JSON format in which the documents are saved.
+
+.. code-block:: JSON
+   :linenos:
+
+    {
+      "id": "<PAPER_ID>",
+      "page_number": "<PAGE_NUMBER>",
+      "title": "<ARTICLE_TITLE>",
+      "text": "<ARTICLE_TEXT>"
+    
+    }
+
+
+This format will help the efforless creation of the vector database and retrieval of the documents.
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 10
    :caption: Contents:

@@ -11,7 +11,7 @@ The Spiritualist
 ==============================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 10
    :caption: Contents:
 
    introduction
@@ -19,4 +19,7 @@ The Spiritualist
    newspapers
    paper_extraction
    article_extraction
+   searching
+   indexing_generation
+   results
 

@@ -1,0 +1,249 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Indexing &mdash; The Spiritualist 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=f2a433a1"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Usage" href="results.html" />
+    <link rel="prev" title="Retrieval" href="searching.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            The Spiritualist
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">The Spiritualist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataset.html">About dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newspapers.html">Newspapers and and its layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paper_extraction.html">Text Extraction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="article_extraction.html">Article Extraction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="searching.html">Retrieval</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Indexing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#indexing-pipeline">Indexing Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#why-chunking">Why Chunking?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tools-used">Tools Used</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#generation">Generation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generation-process">Generation Process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generation-stack">Generation Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="results.html">Usage</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">The Spiritualist</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Indexing</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/indexing_generation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="indexing">
+<h1>Indexing<a class="headerlink" href="#indexing" title="Link to this heading"></a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>Indexing refers to the process of <strong>embedding and storing the source documents</strong> to enable fast and accurate semantic retrieval.
+This is a <strong>preprocessing step</strong> that transforms raw textual data into vector representations, which are then indexed in Elasticsearch
+for approximate nearest neighbor (ANN) search.</p>
+</section>
+<section id="indexing-pipeline">
+<h2>Indexing Pipeline<a class="headerlink" href="#indexing-pipeline" title="Link to this heading"></a></h2>
+<ol class="arabic">
+<li><p><strong>Document Collection</strong>
+- Source documents are curated from <em>The Spiritualist</em> domain.
+- Each document is split into smaller, manageable chunks (e.g., paragraphs or 512-token spans).</p></li>
+<li><p><strong>Embedding Generation</strong>
+- Each text chunk is encoded using the MPNet from sentence-transformers.
+- The output is a 768-dimensional dense vector.</p></li>
+<li><p><strong>Data Structuring</strong>
+- Each document chunk is structured with:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">content</span></code>: the raw text chunk</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">embedding</span></code>: the corresponding vector</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">metadata</span></code>: title, source, tags, etc.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><strong>Insertion into Elasticsearch</strong>
+- Chunks are batched and inserted into an Elasticsearch index.
+- The index uses a <code class="docutils literal notranslate"><span class="pre">dense_vector</span></code> field for ANN-enabled similarity search.</p></li>
+</ol>
+</section>
+<section id="why-chunking">
+<h2>Why Chunking?<a class="headerlink" href="#why-chunking" title="Link to this heading"></a></h2>
+<p>Chunking improves:
+- Contextual precision during retrieval
+- Reduction of irrelevant matches
+- Better alignment with LLM input limits</p>
+</section>
+<section id="tools-used">
+<h2>Tools Used<a class="headerlink" href="#tools-used" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">sentence-transformers</span></code> (MPNet model)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Elasticsearch</span></code> with ANN plugin (e.g., FAISS, HNSW, or native k-NN)</p></li>
+<li><p>Custom Python scripts for batching and bulk indexing</p></li>
+</ul>
+</section>
+</section>
+<section id="generation">
+<h1>Generation<a class="headerlink" href="#generation" title="Link to this heading"></a></h1>
+<section id="id1">
+<h2>Overview<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>The <strong>generation phase</strong> takes retrieved document chunks and uses them to guide a large language model (LLM) in answering the user’s query.
+This is the “generation” step in the Retrieval-Augmented Generation (RAG) pipeline.</p>
+</section>
+<section id="generation-process">
+<h2>Generation Process<a class="headerlink" href="#generation-process" title="Link to this heading"></a></h2>
+<ol class="arabic">
+<li><p><strong>User Query Input</strong>
+- The user inputs a natural language query.</p></li>
+<li><p><strong>Embedding &amp; Retrieval</strong>
+- The query is embedded using the same MPNet model.
+- Top-<em>k</em> most similar chunks are retrieved from Elasticsearch.</p></li>
+<li><p><strong>Prompt Construction</strong>
+- A prompt is constructed by concatenating:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Retrieved context (chunks)</p></li>
+<li><p>The original user query</p></li>
+</ul>
+</div></blockquote>
+<p>Example prompt structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Context:
+[Chunk 1]
+[Chunk 2]
+...
+
+Question:
+What is the purpose of spiritual awakening?
+</pre></div>
+</div>
+</li>
+<li><p><strong>LLM Completion</strong>
+- The prompt is passed to an gpt-4o.
+- The LLM generates a fluent and context-aware answer.</p></li>
+<li><p><strong>Response Formatting</strong>
+- Post-processing is performed to clean up and format the answer for the end user.</p></li>
+</ol>
+</section>
+<section id="generation-stack">
+<h2>Generation Stack<a class="headerlink" href="#generation-stack" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Component</p></th>
+<th class="head"><p>Tool</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Embedding</p></td>
+<td><p>MPNet</p></td>
+</tr>
+<tr class="row-odd"><td><p>Retrieval</p></td>
+<td><p>Elasticsearch</p></td>
+</tr>
+<tr class="row-even"><td><p>Generation</p></td>
+<td><p>gpt-4o</p></td>
+</tr>
+<tr class="row-odd"><td><p>Prompting</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<p>Indexing and generation complete the RAG pipeline by enabling efficient semantic search and grounded text generation.
+This combination allows for intelligent and reliable answers to be provided to users using domain-specific content.</p>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="searching.html" class="btn btn-neutral float-left" title="Retrieval" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="results.html" class="btn btn-neutral float-right" title="Usage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Dr.Rosa Filgueira, Virag Umathe.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

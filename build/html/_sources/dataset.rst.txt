@@ -32,5 +32,5 @@ The original dataset conatins
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 10
    :caption: Contents:

@@ -29,6 +29,11 @@ Work on RAG is currently in progress and will be updated here soon.
 
 For contributing to the project, clone the repository from github
 
+**Acknowledgement**
+
+This project was highly supported by Dr.Rosa Filgueira and I am really thankful to her for all the help she has extended at different stanges in this project.
+The API keys and gen AI support was provided by the James Reid without whom the article extraction process would have been imipossible.
+
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 10
    :caption: Contents:

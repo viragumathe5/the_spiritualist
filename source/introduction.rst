@@ -11,7 +11,7 @@ Edinburgh-born Sir Arthur Conan Doyle was among the supporters of spiritualism.
 Detractors included his friend Harry Houdini,
 who collected spiritualist publications including this title which is in the Harry Houdini Collection in the Library of Congress.
 
-The dataset can be found here `The Spiritualist <https://data.nls.uk/data/digitised-collections/spiritualist-newspapers/>`_
+The dataset can be found at `The Spiritualist <https://data.nls.uk/data/digitised-collections/spiritualist-newspapers/>`_
 
 **The Vision**
 
@@ -21,7 +21,7 @@ This repository in future will work as an Retrieval-augmented Generation (RAG) s
 
 **How to use**
 
-Various tools are avilable to explore on here `The Spiritualist <https://data.nls.uk/tools/>`_
+Various tools are avilable to explore on `The Spiritualist <https://data.nls.uk/tools/>`_
 Work on RAG is currently in progress and will be updated here soon.
 
 
@@ -29,6 +29,11 @@ Work on RAG is currently in progress and will be updated here soon.
 
 For contributing to the project, clone the repository from github
 
+**Acknowledgement**
+
+This project was highly supported by Dr.Rosa Filgueira and I am really thankful to her for all the help she has extended at different stanges in this project.
+The API keys and gen AI support was provided by the James Reid without whom the article extraction process would have been imipossible.
+
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 10
    :caption: Contents:

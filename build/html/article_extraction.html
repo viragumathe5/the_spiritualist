@@ -19,6 +19,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Retrieval" href="searching.html" />
     <link rel="prev" title="Text Extraction" href="paper_extraction.html" /> 
 </head>
 
@@ -50,6 +51,10 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Article Extraction</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="searching.html">Retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indexing_generation.html">Indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indexing_generation.html#generation">Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="results.html">Usage</a></li>
 </ul>
 
         </div>
@@ -78,25 +83,81 @@
              
   <section id="article-extraction">
 <h1>Article Extraction<a class="headerlink" href="#article-extraction" title="Link to this heading"></a></h1>
-<p><strong>Article Extraction</strong></p>
+<p><strong>Article Extraction Process</strong></p>
 <p>For creating an open knowledge project the plan is to build a RAG which can be esaily accessible using simple queires.
-for that purpose the articles, advertisements and other contents are needed to extracted.</p>
-<p>For extracting the articles from the newspaper texts currently we are using GPT-4o.
-Following are the examples for the extracted articles.</p>
-<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w">     </span><span class="p">{</span>
-<span class="linenos"> 2</span><span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;THE PROPOSED CHEAP EDITION, OF ZOLLNER’S “TRANSCENDENTAL -PHYSICS.’’&quot;</span><span class="p">,</span>
-<span class="linenos"> 3</span><span class="w">         </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;A considerable number of volumes of the proposed cheap edition of the above work has been ordered, btit not enough, up to March 1st, to warrant placing the ; .book again in the. press. Those who facilitate the bringing out of the book by &#39; ordering copies before it&#39; goes to press, will bo supplied with tlie&gt; sai4. copies ^at 2s, 6d.. eaQh, whereas, after publication its&#39;price wiTi be 3s. Cd. Orders tor &gt; the book should be sent ,to W. TI. HAKRISONJ, ,b8, ; Miiseutn $1reetj London.&quot;</span>
-<span class="linenos"> 4</span><span class="w">     </span><span class="p">},</span>
-<span class="linenos"> 5</span><span class="w">     </span><span class="p">{</span>
-<span class="linenos"> 6</span><span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;WORKS BY THE HON. RODEN NOEL&quot;</span><span class="p">,</span>
-<span class="linenos"> 7</span><span class="w">         </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;THE RED FLAO, %V &#39; . AND&#39; of H ER ROE its. &#39; Small Svo..&#39;6s. BY Tnk HON. KODIfN NOEL. | “ There are poetry and power of a high&#39; order in thp volume before,us. ,The ‘Red Flag’ is a terribl.e^atid thunderous poem. I There,are,fine sympathies with, the sorrows of Londpn ’ life and ■wonderful knowledge of them.. Perhaps one of the most solemn, • awful poems&#39; of , present century is ^ The Vision of the Desert.’ . Let his. ima.gination Smd metaphysical faCulty .be well yoked and guided by his own cultivated taste, and we must airadmit the advent-df a great ■pQet.”~Britbh Quartei&#39;h/ Review.&quot;</span>
-<span class="linenos"> 8</span><span class="w">     </span><span class="p">},</span>
-<span class="linenos"> 9</span><span class="w">     </span><span class="p">{</span>
-<span class="linenos">10</span><span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;BEATRICE, AND OTHER POEMS&quot;</span><span class="p">,</span>
-<span class="linenos">11</span><span class="w">         </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Fcap. $%&#39;o, 7s. . BY THE II 0 N. ROD EN NO EL,. It is impoBsible to read ‘ Beatrice ’ through without being ,ppwerful.ly;mdv : ed.&#39;&#39; There, afg passages in it Which for intensity and tenderness, clear&#39;and vivjd vision, spontanemia, and delicate Sympathy, may be compared with* the best efforts of our best lining w titers&#39;. Sped at or.&quot;</span>
-<span class="linenos">12</span><span class="w">     </span><span class="p">}</span>
+for that purpose the articles and other contents are needed to extracted.</p>
+<p>The project uses very specific prompt engineering to extract the articles from the articles. The first approach is to divide the concatinated text into the two different segments and feed it to gpt-4o to get the articles but it was more expensive and time consuming and therefore the new extraction process was used for extracting the articles from each page. So the each paper is calling the API for the each page in the newspaper.</p>
+<p>The follwoing snippit shows the exracted format for the articles from the specific paper id and page numer.</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 2</span><span class="w">   </span><span class="nt">&quot;135908619&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 3</span><span class="w">     </span><span class="nt">&quot;Page2&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="linenos"> 4</span><span class="w">       </span><span class="p">{</span>
+<span class="linenos"> 5</span><span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="linenos"> 6</span><span class="w">         </span><span class="nt">&quot;article&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+<span class="linenos"> 7</span><span class="w">       </span><span class="p">}</span>
+<span class="linenos"> 8</span><span class="w">     </span><span class="p">],</span>
+<span class="linenos"> 9</span><span class="w">     </span><span class="nt">&quot;Page3&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="linenos">10</span><span class="w">       </span><span class="p">{</span>
+<span class="linenos">11</span><span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="linenos">12</span><span class="w">         </span><span class="nt">&quot;article&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+<span class="linenos">13</span><span class="w">       </span><span class="p">}</span>
+<span class="linenos">14</span><span class="w">     </span><span class="p">],</span>
+<span class="linenos">15</span><span class="w">     </span><span class="nt">&quot;Page4&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="linenos">16</span><span class="w">       </span><span class="p">{</span>
+<span class="linenos">17</span><span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="linenos">18</span><span class="w">         </span><span class="nt">&quot;article&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+<span class="linenos">19</span><span class="w">       </span><span class="p">},</span>
+<span class="linenos">20</span><span class="w">     </span><span class="p">],</span>
+<span class="linenos">21</span><span class="w">     </span><span class="nt">&quot;Page5&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="linenos">22</span><span class="w">       </span><span class="p">{</span>
+<span class="linenos">23</span><span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="linenos">24</span><span class="w">         </span><span class="nt">&quot;article&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+<span class="linenos">25</span><span class="w">       </span><span class="p">},</span>
+<span class="linenos">26</span><span class="w">       </span><span class="p">{</span>
+<span class="linenos">27</span><span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="linenos">28</span><span class="w">         </span><span class="nt">&quot;article&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+<span class="linenos">29</span><span class="w">       </span><span class="p">},</span>
+<span class="linenos">30</span><span class="w">       </span><span class="p">{</span>
+<span class="linenos">31</span><span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="linenos">32</span><span class="w">         </span><span class="nt">&quot;article&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+<span class="linenos">33</span><span class="w">       </span><span class="p">}</span>
+<span class="linenos">34</span><span class="w">     </span><span class="p">],</span>
+<span class="linenos">35</span><span class="w">     </span><span class="nt">&quot;Page7&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="linenos">36</span><span class="w">       </span><span class="p">{</span>
+<span class="linenos">37</span><span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="linenos">38</span><span class="w">         </span><span class="nt">&quot;article&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+<span class="linenos">39</span><span class="w">       </span><span class="p">},</span>
+<span class="linenos">40</span><span class="w">       </span><span class="p">{</span>
+<span class="linenos">41</span><span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="linenos">42</span><span class="w">         </span><span class="nt">&quot;article&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+<span class="linenos">43</span><span class="w">       </span><span class="p">},</span>
+<span class="linenos">44</span><span class="w">       </span><span class="p">{</span>
+<span class="linenos">45</span><span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="linenos">46</span><span class="w">         </span><span class="nt">&quot;article&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+<span class="linenos">47</span><span class="w">       </span><span class="p">},</span>
+<span class="linenos">48</span><span class="w">       </span><span class="p">{</span>
+<span class="linenos">49</span><span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="linenos">50</span><span class="w">         </span><span class="nt">&quot;article&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+<span class="linenos">51</span><span class="w">       </span><span class="p">}</span>
+<span class="linenos">52</span><span class="w">     </span><span class="p">]</span>
+<span class="linenos">53</span><span class="w">   </span><span class="p">}</span>
+<span class="linenos">54</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
+<p>This JSONs helps trace back the articles when they are retrieved and indexed. After the generation of the respone it can be referred back as the generated content reference.</p>
+<p><strong>Documents</strong></p>
+<p>As a part of the RAG pipeline, Each article is considered as a document. Hence it needs to have its own meta data to retrieve the information about the article. The important meta data which needs to be traced back is paper id, page number, title and text. All the extracted information get paarsed and the documets are stored in the JSON for preparaiton of the vector database.</p>
+<p>The following snippit shows the possible JSON format in which the documents are saved.</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">2</span><span class="w">   </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;PAPER_ID&gt;&quot;</span><span class="p">,</span>
+<span class="linenos">3</span><span class="w">   </span><span class="nt">&quot;page_number&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;PAGE_NUMBER&gt;&quot;</span><span class="p">,</span>
+<span class="linenos">4</span><span class="w">   </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;ARTICLE_TITLE&gt;&quot;</span><span class="p">,</span>
+<span class="linenos">5</span><span class="w">   </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;ARTICLE_TEXT&gt;&quot;</span>
+<span class="linenos">6</span>
+<span class="linenos">7</span><span class="w"> </span><span class="p">}</span>
+</pre></div>
+</div>
+<p>This format will help the efforless creation of the vector database and retrieval of the documents.</p>
 <div class="toctree-wrapper compound">
 </div>
 </section>
@@ -106,6 +167,7 @@ Following are the examples for the extracted articles.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="paper_extraction.html" class="btn btn-neutral float-left" title="Text Extraction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="searching.html" class="btn btn-neutral float-right" title="Retrieval" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

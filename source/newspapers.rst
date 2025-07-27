@@ -46,5 +46,5 @@ Also the three newspapers in The Spiritualist have different page layouts.
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 10
    :caption: Contents:
